@@ -163,7 +163,7 @@ async function processCustomerMessage(
   await supabaseAdmin.from("messages").insert({
     conversation_id: conversationId,
     direction: "inbound",
-    role: "user",
+    role: "customer",
     body: text,
     whatsapp_message_id: waMessageId,
   });
@@ -182,9 +182,12 @@ async function processCustomerMessage(
     .limit(20);
   const history = (histRes.data ?? [])
     .reverse()
-    .filter((m) => m.role === "user" || m.role === "assistant")
+    .filter((m) => m.role === "customer" || m.role === "ai")
     .slice(0, -1) // exclude the just-inserted inbound (we pass it separately)
-    .map((m) => ({ role: m.role as "user" | "assistant", content: m.body }));
+    .map((m) => ({
+      role: (m.role === "customer" ? "user" : "assistant") as "user" | "assistant",
+      content: m.body,
+    }));
 
   // 6. Run AI
   const agentResult = await runConversationTurn(text, {
@@ -208,7 +211,7 @@ async function processCustomerMessage(
   await supabaseAdmin.from("messages").insert({
     conversation_id: conversationId,
     direction: "outbound",
-    role: "assistant",
+    role: "ai",
     body: agentResult.reply,
     whatsapp_message_id: outboundId,
     error: sendErr,
