@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
 import { Route as AuthenticatedAppIndexRouteImport } from './routes/_authenticated/app.index'
+import { Route as ApiPublicWooOrderRouteImport } from './routes/api/public/woo-order'
 import { Route as AuthenticatedAppSettingsRouteImport } from './routes/_authenticated/app.settings'
 import { Route as AuthenticatedAppProductsRouteImport } from './routes/_authenticated/app.products'
 import { Route as AuthenticatedAppOrdersRouteImport } from './routes/_authenticated/app.orders'
@@ -42,6 +43,11 @@ const AuthenticatedAppIndexRoute = AuthenticatedAppIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthenticatedAppRoute,
+} as any)
+const ApiPublicWooOrderRoute = ApiPublicWooOrderRouteImport.update({
+  id: '/api/public/woo-order',
+  path: '/api/public/woo-order',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAppSettingsRoute =
   AuthenticatedAppSettingsRouteImport.update({
@@ -75,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/app/orders': typeof AuthenticatedAppOrdersRoute
   '/app/products': typeof AuthenticatedAppProductsRoute
   '/app/settings': typeof AuthenticatedAppSettingsRoute
+  '/api/public/woo-order': typeof ApiPublicWooOrderRoute
   '/app/': typeof AuthenticatedAppIndexRoute
 }
 export interface FileRoutesByTo {
@@ -84,6 +91,7 @@ export interface FileRoutesByTo {
   '/app/orders': typeof AuthenticatedAppOrdersRoute
   '/app/products': typeof AuthenticatedAppProductsRoute
   '/app/settings': typeof AuthenticatedAppSettingsRoute
+  '/api/public/woo-order': typeof ApiPublicWooOrderRoute
   '/app': typeof AuthenticatedAppIndexRoute
 }
 export interface FileRoutesById {
@@ -96,6 +104,7 @@ export interface FileRoutesById {
   '/_authenticated/app/orders': typeof AuthenticatedAppOrdersRoute
   '/_authenticated/app/products': typeof AuthenticatedAppProductsRoute
   '/_authenticated/app/settings': typeof AuthenticatedAppSettingsRoute
+  '/api/public/woo-order': typeof ApiPublicWooOrderRoute
   '/_authenticated/app/': typeof AuthenticatedAppIndexRoute
 }
 export interface FileRouteTypes {
@@ -108,6 +117,7 @@ export interface FileRouteTypes {
     | '/app/orders'
     | '/app/products'
     | '/app/settings'
+    | '/api/public/woo-order'
     | '/app/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -117,6 +127,7 @@ export interface FileRouteTypes {
     | '/app/orders'
     | '/app/products'
     | '/app/settings'
+    | '/api/public/woo-order'
     | '/app'
   id:
     | '__root__'
@@ -128,6 +139,7 @@ export interface FileRouteTypes {
     | '/_authenticated/app/orders'
     | '/_authenticated/app/products'
     | '/_authenticated/app/settings'
+    | '/api/public/woo-order'
     | '/_authenticated/app/'
   fileRoutesById: FileRoutesById
 }
@@ -135,6 +147,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ApiPublicWooOrderRoute: typeof ApiPublicWooOrderRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -173,6 +186,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/'
       preLoaderRoute: typeof AuthenticatedAppIndexRouteImport
       parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/api/public/woo-order': {
+      id: '/api/public/woo-order'
+      path: '/api/public/woo-order'
+      fullPath: '/api/public/woo-order'
+      preLoaderRoute: typeof ApiPublicWooOrderRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/app/settings': {
       id: '/_authenticated/app/settings'
@@ -240,17 +260,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AuthRoute: AuthRoute,
+  ApiPublicWooOrderRoute: ApiPublicWooOrderRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
