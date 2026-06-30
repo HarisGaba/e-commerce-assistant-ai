@@ -20,6 +20,7 @@ import { Route as ApiPublicPostexDispatchRouteImport } from './routes/api/public
 import { Route as AuthenticatedAppSettingsRouteImport } from './routes/_authenticated/app.settings'
 import { Route as AuthenticatedAppProductsRouteImport } from './routes/_authenticated/app.products'
 import { Route as AuthenticatedAppOrdersRouteImport } from './routes/_authenticated/app.orders'
+import { Route as AuthenticatedAppConversationsRouteImport } from './routes/_authenticated/app.conversations'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -77,11 +78,18 @@ const AuthenticatedAppOrdersRoute = AuthenticatedAppOrdersRouteImport.update({
   path: '/orders',
   getParentRoute: () => AuthenticatedAppRoute,
 } as any)
+const AuthenticatedAppConversationsRoute =
+  AuthenticatedAppConversationsRouteImport.update({
+    id: '/conversations',
+    path: '/conversations',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/app': typeof AuthenticatedAppRouteWithChildren
+  '/app/conversations': typeof AuthenticatedAppConversationsRoute
   '/app/orders': typeof AuthenticatedAppOrdersRoute
   '/app/products': typeof AuthenticatedAppProductsRoute
   '/app/settings': typeof AuthenticatedAppSettingsRoute
@@ -93,6 +101,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/app/conversations': typeof AuthenticatedAppConversationsRoute
   '/app/orders': typeof AuthenticatedAppOrdersRoute
   '/app/products': typeof AuthenticatedAppProductsRoute
   '/app/settings': typeof AuthenticatedAppSettingsRoute
@@ -107,6 +116,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth': typeof AuthRoute
   '/_authenticated/app': typeof AuthenticatedAppRouteWithChildren
+  '/_authenticated/app/conversations': typeof AuthenticatedAppConversationsRoute
   '/_authenticated/app/orders': typeof AuthenticatedAppOrdersRoute
   '/_authenticated/app/products': typeof AuthenticatedAppProductsRoute
   '/_authenticated/app/settings': typeof AuthenticatedAppSettingsRoute
@@ -121,6 +131,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/app'
+    | '/app/conversations'
     | '/app/orders'
     | '/app/products'
     | '/app/settings'
@@ -132,6 +143,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/app/conversations'
     | '/app/orders'
     | '/app/products'
     | '/app/settings'
@@ -145,6 +157,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/_authenticated/app'
+    | '/_authenticated/app/conversations'
     | '/_authenticated/app/orders'
     | '/_authenticated/app/products'
     | '/_authenticated/app/settings'
@@ -242,10 +255,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppOrdersRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/app/conversations': {
+      id: '/_authenticated/app/conversations'
+      path: '/conversations'
+      fullPath: '/app/conversations'
+      preLoaderRoute: typeof AuthenticatedAppConversationsRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
   }
 }
 
 interface AuthenticatedAppRouteChildren {
+  AuthenticatedAppConversationsRoute: typeof AuthenticatedAppConversationsRoute
   AuthenticatedAppOrdersRoute: typeof AuthenticatedAppOrdersRoute
   AuthenticatedAppProductsRoute: typeof AuthenticatedAppProductsRoute
   AuthenticatedAppSettingsRoute: typeof AuthenticatedAppSettingsRoute
@@ -253,6 +274,7 @@ interface AuthenticatedAppRouteChildren {
 }
 
 const AuthenticatedAppRouteChildren: AuthenticatedAppRouteChildren = {
+  AuthenticatedAppConversationsRoute: AuthenticatedAppConversationsRoute,
   AuthenticatedAppOrdersRoute: AuthenticatedAppOrdersRoute,
   AuthenticatedAppProductsRoute: AuthenticatedAppProductsRoute,
   AuthenticatedAppSettingsRoute: AuthenticatedAppSettingsRoute,
