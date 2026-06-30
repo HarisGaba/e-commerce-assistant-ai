@@ -146,6 +146,43 @@ export const Route = createFileRoute("/api/public/woo-order")({
           console.error("[woo-order] sheet append error", (e as Error).message);
         }
 
+        // Send the AI confirmation opener over WhatsApp (best-effort).
+        try {
+          const { sendWhatsAppText } = await import("@/lib/whatsapp.server");
+          const { buildOrderConfirmationOpener } = await import("@/lib/ai-agent.server");
+          const opener = buildOrderConfirmationOpener({
+            customerName: fullName,
+            wooOrderId,
+            items: lineItems.map((li: any) => ({ name: li.name, quantity: Number(li.quantity ?? 1) })),
+            total: payload.total != null ? Number(payload.total) : null,
+            currency: payload.currency ?? "PKR",
+            address: [address, city].filter(Boolean).join(", ") || null,
+          });
+          const sent = await sendWhatsAppText(phone, opener);
+
+          // Create conversation + log the outbound opener so the dashboard shows it.
+          const convIns = await supabaseAdmin
+            .from("conversations")
+            .upsert(
+              { customer_id: customerId, order_id: orderId, mode: "ai" },
+              { onConflict: "customer_id" },
+            )
+            .select("id")
+            .single();
+          if (convIns.data) {
+            await supabaseAdmin.from("messages").insert({
+              conversation_id: convIns.data.id,
+              direction: "outbound",
+              role: "ai",
+              body: opener,
+              whatsapp_message_id: sent.messageId ?? null,
+              error: sent.skipped ? sent.reason ?? "WhatsApp not configured" : null,
+            });
+          }
+        } catch (e) {
+          console.error("[woo-order] WA opener failed", (e as Error).message);
+        }
+
         return Response.json({ ok: true, order_id: orderId });
       },
     },
