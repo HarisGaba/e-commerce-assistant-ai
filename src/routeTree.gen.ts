@@ -15,6 +15,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
 import { Route as AuthenticatedAppIndexRouteImport } from './routes/_authenticated/app.index'
 import { Route as ApiPublicWooOrderRouteImport } from './routes/api/public/woo-order'
+import { Route as ApiPublicWhatsappRouteImport } from './routes/api/public/whatsapp'
+import { Route as ApiPublicPostexDispatchRouteImport } from './routes/api/public/postex-dispatch'
 import { Route as AuthenticatedAppSettingsRouteImport } from './routes/_authenticated/app.settings'
 import { Route as AuthenticatedAppProductsRouteImport } from './routes/_authenticated/app.products'
 import { Route as AuthenticatedAppOrdersRouteImport } from './routes/_authenticated/app.orders'
@@ -49,6 +51,16 @@ const ApiPublicWooOrderRoute = ApiPublicWooOrderRouteImport.update({
   path: '/api/public/woo-order',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicWhatsappRoute = ApiPublicWhatsappRouteImport.update({
+  id: '/api/public/whatsapp',
+  path: '/api/public/whatsapp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicPostexDispatchRoute = ApiPublicPostexDispatchRouteImport.update({
+  id: '/api/public/postex-dispatch',
+  path: '/api/public/postex-dispatch',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAppSettingsRoute =
   AuthenticatedAppSettingsRouteImport.update({
     id: '/settings',
@@ -81,6 +93,8 @@ export interface FileRoutesByFullPath {
   '/app/orders': typeof AuthenticatedAppOrdersRoute
   '/app/products': typeof AuthenticatedAppProductsRoute
   '/app/settings': typeof AuthenticatedAppSettingsRoute
+  '/api/public/postex-dispatch': typeof ApiPublicPostexDispatchRoute
+  '/api/public/whatsapp': typeof ApiPublicWhatsappRoute
   '/api/public/woo-order': typeof ApiPublicWooOrderRoute
   '/app/': typeof AuthenticatedAppIndexRoute
 }
@@ -91,6 +105,8 @@ export interface FileRoutesByTo {
   '/app/orders': typeof AuthenticatedAppOrdersRoute
   '/app/products': typeof AuthenticatedAppProductsRoute
   '/app/settings': typeof AuthenticatedAppSettingsRoute
+  '/api/public/postex-dispatch': typeof ApiPublicPostexDispatchRoute
+  '/api/public/whatsapp': typeof ApiPublicWhatsappRoute
   '/api/public/woo-order': typeof ApiPublicWooOrderRoute
   '/app': typeof AuthenticatedAppIndexRoute
 }
@@ -104,6 +120,8 @@ export interface FileRoutesById {
   '/_authenticated/app/orders': typeof AuthenticatedAppOrdersRoute
   '/_authenticated/app/products': typeof AuthenticatedAppProductsRoute
   '/_authenticated/app/settings': typeof AuthenticatedAppSettingsRoute
+  '/api/public/postex-dispatch': typeof ApiPublicPostexDispatchRoute
+  '/api/public/whatsapp': typeof ApiPublicWhatsappRoute
   '/api/public/woo-order': typeof ApiPublicWooOrderRoute
   '/_authenticated/app/': typeof AuthenticatedAppIndexRoute
 }
@@ -117,6 +135,8 @@ export interface FileRouteTypes {
     | '/app/orders'
     | '/app/products'
     | '/app/settings'
+    | '/api/public/postex-dispatch'
+    | '/api/public/whatsapp'
     | '/api/public/woo-order'
     | '/app/'
   fileRoutesByTo: FileRoutesByTo
@@ -127,6 +147,8 @@ export interface FileRouteTypes {
     | '/app/orders'
     | '/app/products'
     | '/app/settings'
+    | '/api/public/postex-dispatch'
+    | '/api/public/whatsapp'
     | '/api/public/woo-order'
     | '/app'
   id:
@@ -139,6 +161,8 @@ export interface FileRouteTypes {
     | '/_authenticated/app/orders'
     | '/_authenticated/app/products'
     | '/_authenticated/app/settings'
+    | '/api/public/postex-dispatch'
+    | '/api/public/whatsapp'
     | '/api/public/woo-order'
     | '/_authenticated/app/'
   fileRoutesById: FileRoutesById
@@ -147,6 +171,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ApiPublicPostexDispatchRoute: typeof ApiPublicPostexDispatchRoute
+  ApiPublicWhatsappRoute: typeof ApiPublicWhatsappRoute
   ApiPublicWooOrderRoute: typeof ApiPublicWooOrderRoute
 }
 
@@ -192,6 +218,20 @@ declare module '@tanstack/react-router' {
       path: '/api/public/woo-order'
       fullPath: '/api/public/woo-order'
       preLoaderRoute: typeof ApiPublicWooOrderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/whatsapp': {
+      id: '/api/public/whatsapp'
+      path: '/api/public/whatsapp'
+      fullPath: '/api/public/whatsapp'
+      preLoaderRoute: typeof ApiPublicWhatsappRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/postex-dispatch': {
+      id: '/api/public/postex-dispatch'
+      path: '/api/public/postex-dispatch'
+      fullPath: '/api/public/postex-dispatch'
+      preLoaderRoute: typeof ApiPublicPostexDispatchRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/app/settings': {
@@ -260,6 +300,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AuthRoute: AuthRoute,
+  ApiPublicPostexDispatchRoute: ApiPublicPostexDispatchRoute,
+  ApiPublicWhatsappRoute: ApiPublicWhatsappRoute,
   ApiPublicWooOrderRoute: ApiPublicWooOrderRoute,
 }
 export const routeTree = rootRouteImport

@@ -73,8 +73,28 @@ function SettingsPage() {
           <CopyField
             label="Postex — Dispatch webhook (Phase 5)"
             value={`${origin || "https://your-app.lovable.app"}/api/public/postex-dispatch`}
-            hint="We'll wire this up in Phase 5 once Postex is connected."
+            hint="POST with header X-Postex-Signature = HMAC-SHA256(POSTEX_WEBHOOK_SECRET, rawBody). Body: { order_reference, tracking_id, tracking_url? }."
           />
+          <CopyField
+            label="WhatsApp — Inbound webhook (Meta Cloud API)"
+            value={`${origin || "https://your-app.lovable.app"}/api/public/whatsapp`}
+            hint="In Meta App → WhatsApp → Configuration → Webhook. Verify token: value of WHATSAPP_VERIFY_TOKEN. Subscribe to the 'messages' field."
+          />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Credentials still needed</CardTitle>
+          <CardDescription>
+            Build is finished end-to-end. Plug these in once the client's site and Meta app are ready and everything will start flowing.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="text-sm text-muted-foreground space-y-2">
+          <div>• <span className="font-medium text-foreground">WooCommerce connection</span> — connect via Lovable connectors (store URL + Consumer key/secret).</div>
+          <div>• <span className="font-medium text-foreground">Google Sheets connection</span> — connect via Lovable connectors, then set <code className="text-xs">GOOGLE_SHEET_ID</code>.</div>
+          <div>• <span className="font-medium text-foreground">Meta WhatsApp</span> — set <code className="text-xs">WHATSAPP_PHONE_NUMBER_ID</code>, <code className="text-xs">WHATSAPP_ACCESS_TOKEN</code>, <code className="text-xs">WHATSAPP_APP_SECRET</code>.</div>
+          <div>• <span className="font-medium text-foreground">Postex</span> — point its dispatch automation at the URL above with the shared secret.</div>
         </CardContent>
       </Card>
 
