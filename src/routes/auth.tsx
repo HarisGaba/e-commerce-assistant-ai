@@ -90,7 +90,7 @@ function AuthPage() {
           </p>
         </div>
         <p className="text-sm text-sidebar-foreground/50">
-          Built for Pakistani e-commerce. Powered by Lovable AI.
+          Built for Pakistani e-commerce.
         </p>
       </div>
 
