@@ -17,6 +17,7 @@ import { Route as AuthenticatedAppIndexRouteImport } from './routes/_authenticat
 import { Route as ApiPublicWooOrderRouteImport } from './routes/api/public/woo-order'
 import { Route as ApiPublicWhatsappRouteImport } from './routes/api/public/whatsapp'
 import { Route as ApiPublicPostexDispatchRouteImport } from './routes/api/public/postex-dispatch'
+import { Route as AuthenticatedAppSimulatorRouteImport } from './routes/_authenticated/app.simulator'
 import { Route as AuthenticatedAppSettingsRouteImport } from './routes/_authenticated/app.settings'
 import { Route as AuthenticatedAppProductsRouteImport } from './routes/_authenticated/app.products'
 import { Route as AuthenticatedAppOrdersRouteImport } from './routes/_authenticated/app.orders'
@@ -61,6 +62,12 @@ const ApiPublicPostexDispatchRoute = ApiPublicPostexDispatchRouteImport.update({
   path: '/api/public/postex-dispatch',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAppSimulatorRoute =
+  AuthenticatedAppSimulatorRouteImport.update({
+    id: '/simulator',
+    path: '/simulator',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
 const AuthenticatedAppSettingsRoute =
   AuthenticatedAppSettingsRouteImport.update({
     id: '/settings',
@@ -93,6 +100,7 @@ export interface FileRoutesByFullPath {
   '/app/orders': typeof AuthenticatedAppOrdersRoute
   '/app/products': typeof AuthenticatedAppProductsRoute
   '/app/settings': typeof AuthenticatedAppSettingsRoute
+  '/app/simulator': typeof AuthenticatedAppSimulatorRoute
   '/api/public/postex-dispatch': typeof ApiPublicPostexDispatchRoute
   '/api/public/whatsapp': typeof ApiPublicWhatsappRoute
   '/api/public/woo-order': typeof ApiPublicWooOrderRoute
@@ -105,6 +113,7 @@ export interface FileRoutesByTo {
   '/app/orders': typeof AuthenticatedAppOrdersRoute
   '/app/products': typeof AuthenticatedAppProductsRoute
   '/app/settings': typeof AuthenticatedAppSettingsRoute
+  '/app/simulator': typeof AuthenticatedAppSimulatorRoute
   '/api/public/postex-dispatch': typeof ApiPublicPostexDispatchRoute
   '/api/public/whatsapp': typeof ApiPublicWhatsappRoute
   '/api/public/woo-order': typeof ApiPublicWooOrderRoute
@@ -120,6 +129,7 @@ export interface FileRoutesById {
   '/_authenticated/app/orders': typeof AuthenticatedAppOrdersRoute
   '/_authenticated/app/products': typeof AuthenticatedAppProductsRoute
   '/_authenticated/app/settings': typeof AuthenticatedAppSettingsRoute
+  '/_authenticated/app/simulator': typeof AuthenticatedAppSimulatorRoute
   '/api/public/postex-dispatch': typeof ApiPublicPostexDispatchRoute
   '/api/public/whatsapp': typeof ApiPublicWhatsappRoute
   '/api/public/woo-order': typeof ApiPublicWooOrderRoute
@@ -135,6 +145,7 @@ export interface FileRouteTypes {
     | '/app/orders'
     | '/app/products'
     | '/app/settings'
+    | '/app/simulator'
     | '/api/public/postex-dispatch'
     | '/api/public/whatsapp'
     | '/api/public/woo-order'
@@ -147,6 +158,7 @@ export interface FileRouteTypes {
     | '/app/orders'
     | '/app/products'
     | '/app/settings'
+    | '/app/simulator'
     | '/api/public/postex-dispatch'
     | '/api/public/whatsapp'
     | '/api/public/woo-order'
@@ -161,6 +173,7 @@ export interface FileRouteTypes {
     | '/_authenticated/app/orders'
     | '/_authenticated/app/products'
     | '/_authenticated/app/settings'
+    | '/_authenticated/app/simulator'
     | '/api/public/postex-dispatch'
     | '/api/public/whatsapp'
     | '/api/public/woo-order'
@@ -234,6 +247,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPostexDispatchRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/app/simulator': {
+      id: '/_authenticated/app/simulator'
+      path: '/simulator'
+      fullPath: '/app/simulator'
+      preLoaderRoute: typeof AuthenticatedAppSimulatorRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
     '/_authenticated/app/settings': {
       id: '/_authenticated/app/settings'
       path: '/settings'
@@ -270,6 +290,7 @@ interface AuthenticatedAppRouteChildren {
   AuthenticatedAppOrdersRoute: typeof AuthenticatedAppOrdersRoute
   AuthenticatedAppProductsRoute: typeof AuthenticatedAppProductsRoute
   AuthenticatedAppSettingsRoute: typeof AuthenticatedAppSettingsRoute
+  AuthenticatedAppSimulatorRoute: typeof AuthenticatedAppSimulatorRoute
   AuthenticatedAppIndexRoute: typeof AuthenticatedAppIndexRoute
 }
 
@@ -278,6 +299,7 @@ const AuthenticatedAppRouteChildren: AuthenticatedAppRouteChildren = {
   AuthenticatedAppOrdersRoute: AuthenticatedAppOrdersRoute,
   AuthenticatedAppProductsRoute: AuthenticatedAppProductsRoute,
   AuthenticatedAppSettingsRoute: AuthenticatedAppSettingsRoute,
+  AuthenticatedAppSimulatorRoute: AuthenticatedAppSimulatorRoute,
   AuthenticatedAppIndexRoute: AuthenticatedAppIndexRoute,
 }
 

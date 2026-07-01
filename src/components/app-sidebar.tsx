@@ -5,6 +5,7 @@ import {
   ShoppingBag,
   MessageSquare,
   Package,
+  Sparkles,
   Settings,
   LogOut,
 } from "lucide-react";
@@ -17,6 +18,7 @@ const nav: NavItem[] = [
   { to: "/app/orders", label: "Orders", icon: ShoppingBag },
   { to: "/app/conversations", label: "Conversations", icon: MessageSquare },
   { to: "/app/products", label: "Products", icon: Package },
+  { to: "/app/simulator", label: "AI Simulator", icon: Sparkles },
   { to: "/app/settings", label: "Settings", icon: Settings },
 ];
 
