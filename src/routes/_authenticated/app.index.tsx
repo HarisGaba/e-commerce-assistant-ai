@@ -3,6 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ShoppingBag, MessageSquare, CheckCircle2, Truck } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { getIntegrationStatusFn } from "@/lib/integration-status.functions";
 
 export const Route = createFileRoute("/_authenticated/app/")({
   head: () => ({ meta: [{ title: "Overview — Order Concierge" }] }),
@@ -42,6 +44,11 @@ function Overview() {
       };
     },
   });
+  const getStatus = useServerFn(getIntegrationStatusFn);
+  const { data: status } = useQuery({
+    queryKey: ["integration-status"],
+    queryFn: () => getStatus({}),
+  });
 
   return (
     <div className="p-8 space-y-6">
@@ -64,10 +71,10 @@ function Overview() {
           <CardTitle>Getting started</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3 text-sm">
-          <Step n={1} done={false} text="Connect your WooCommerce store (Settings → Integrations)" />
-          <Step n={2} done={false} text="Connect Google Sheets to log orders" />
-          <Step n={3} done={false} text="Configure WhatsApp Business credentials" />
-          <Step n={4} done={false} text="Add the Postex dispatch webhook in your Postex panel" />
+          <Step n={1} done={!!status?.woocommerce} text="Connect your WooCommerce store (Settings → Integrations)" />
+          <Step n={2} done={!!status?.googleSheets} text="Connect Google Sheets to log orders" />
+          <Step n={3} done={!!status?.whatsapp} text="Configure WhatsApp Business credentials" />
+          <Step n={4} done={!!status?.postex} text="Add the Postex dispatch webhook in your Postex panel" />
         </CardContent>
       </Card>
     </div>
