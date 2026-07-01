@@ -6,7 +6,7 @@ import { searchProducts, getProduct } from "./woo-products.server";
 export const searchProductsFn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: { query: string; limit?: number }) =>
-    z.object({ query: z.string().default(""), limit: z.number().int().min(1).max(20).default(12) }).parse(d),
+    z.object({ query: z.string().default(""), limit: z.number().int().min(1).max(50).default(12) }).parse(d),
   )
   .handler(async ({ data }) => {
     const results = await searchProducts(data.query || "", data.limit);
