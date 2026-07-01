@@ -100,8 +100,8 @@ function SettingsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="text-sm text-muted-foreground space-y-2">
-          <div>• <span className="font-medium text-foreground">WooCommerce connection</span> — connect via Lovable connectors (store URL + Consumer key/secret).</div>
-          <div>• <span className="font-medium text-foreground">Google Sheets connection</span> — connect via Lovable connectors, then set <code className="text-xs">GOOGLE_SHEET_ID</code>.</div>
+          <div>• <span className="font-medium text-foreground">WooCommerce connection</span> — connect your store (URL + Consumer key/secret).</div>
+          <div>• <span className="font-medium text-foreground">Google Sheets connection</span> — connect your sheet, then set <code className="text-xs">GOOGLE_SHEET_ID</code>.</div>
           <div>• <span className="font-medium text-foreground">Meta WhatsApp</span> — set <code className="text-xs">WHATSAPP_PHONE_NUMBER_ID</code>, <code className="text-xs">WHATSAPP_ACCESS_TOKEN</code>, <code className="text-xs">WHATSAPP_APP_SECRET</code>.</div>
           <div>• <span className="font-medium text-foreground">Postex</span> — point its dispatch automation at the URL above with the shared secret.</div>
         </CardContent>
