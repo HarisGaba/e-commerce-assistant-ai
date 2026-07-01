@@ -1,21 +1,25 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { ShoppingBag, FileSpreadsheet, MessageSquare, Truck, Copy, Check } from "lucide-react";
+import { ShoppingBag, FileSpreadsheet, MessageSquare, Truck, Copy, Check, CheckCircle2, XCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useServerFn } from "@tanstack/react-start";
+import { useQuery } from "@tanstack/react-query";
+import { getIntegrationStatusFn } from "@/lib/integration-status.functions";
 
 export const Route = createFileRoute("/_authenticated/app/settings")({
   head: () => ({ meta: [{ title: "Settings — Order Concierge" }] }),
   component: SettingsPage,
 });
 
-const integrations = [
-  { icon: ShoppingBag, name: "WooCommerce", desc: "Pushes new orders into the system via webhook", phase: "Phase 2" },
-  { icon: FileSpreadsheet, name: "Google Sheets", desc: "Appends a row per order for your fulfillment team", phase: "Phase 2" },
-  { icon: MessageSquare, name: "WhatsApp Business", desc: "Sends confirmations and runs the AI conversation", phase: "Phase 3–4" },
-  { icon: Truck, name: "Postex", desc: "Notifies the customer when their parcel ships", phase: "Phase 5" },
+type IntegrationKey = "woocommerce" | "googleSheets" | "whatsapp" | "postex";
+const integrations: { key: IntegrationKey; icon: typeof ShoppingBag; name: string; desc: string }[] = [
+  { key: "woocommerce", icon: ShoppingBag, name: "WooCommerce", desc: "Pushes new orders into the system via webhook" },
+  { key: "googleSheets", icon: FileSpreadsheet, name: "Google Sheets", desc: "Appends a row per order for your fulfillment team" },
+  { key: "whatsapp", icon: MessageSquare, name: "WhatsApp Business", desc: "Sends confirmations and runs the AI conversation" },
+  { key: "postex", icon: Truck, name: "Postex", desc: "Notifies the customer when their parcel ships" },
 ];
 
 function CopyField({ label, value, hint }: { label: string; value: string; hint?: string }) {
@@ -48,6 +52,11 @@ function SettingsPage() {
   useEffect(() => {
     setOrigin(window.location.origin);
   }, []);
+  const getStatus = useServerFn(getIntegrationStatusFn);
+  const { data: status } = useQuery({
+    queryKey: ["integration-status"],
+    queryFn: () => getStatus({}),
+  });
 
   return (
     <div className="p-8 space-y-6">
@@ -101,18 +110,28 @@ function SettingsPage() {
       <div className="grid gap-4 md:grid-cols-2">
         {integrations.map((i) => {
           const Icon = i.icon;
+          const connected = status?.[i.key] ?? false;
           return (
             <Card key={i.name}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-base">
                   <Icon className="w-5 h-5 text-primary" />
                   {i.name}
-                  <Badge variant="outline" className="ml-auto text-xs">{i.phase}</Badge>
+                  <Badge
+                    variant="secondary"
+                    className={`ml-auto text-xs ${connected ? "bg-success/20 text-success" : "bg-muted text-muted-foreground"}`}
+                  >
+                    {connected ? (
+                      <><CheckCircle2 className="w-3 h-3 mr-1" /> Connected</>
+                    ) : (
+                      <><XCircle className="w-3 h-3 mr-1" /> Pending</>
+                    )}
+                  </Badge>
                 </CardTitle>
                 <CardDescription>{i.desc}</CardDescription>
               </CardHeader>
               <CardContent className="text-sm text-muted-foreground">
-                Not connected yet.
+                {connected ? "Live and ready." : "Waiting for credentials — see the checklist above."}
               </CardContent>
             </Card>
           );
